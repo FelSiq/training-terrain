@@ -22,7 +22,7 @@ int main(int argc, char const *argv[]){
 
 	instance->changeVar(23);
 
-	std::cout << std::to_string(instance->myVar) + '\n';
+	//std::cout << std::to_string(instance->myVar) + '\n';
 
 	std::cout << std::to_string(instance->retVar()) + '\n'	;
 

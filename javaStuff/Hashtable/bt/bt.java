@@ -1,3 +1,4 @@
+package bt;
 import java.util.Random;
 
 class node <T>{
@@ -25,7 +26,7 @@ class node <T>{
 	};
 };
 
-class bt <T>{
+public 	class bt <T>{
 	node<T> root;
 	int nodeNum;
 
@@ -78,8 +79,8 @@ class bt <T>{
 	}
 
 	public T search(int searchKey){
-		if (root != null)
-			return searchRec(root, searchKey);
+		if (this.root != null)
+			return searchRec(this.root, searchKey);
 		return null;
 	}
 
@@ -104,7 +105,7 @@ class bt <T>{
 	}
 };
 
-class treeManager{
+/*class treeManager{
 	static public void main(String args[]){
 		bt <Float> tree = new bt <Float>();
 
@@ -115,4 +116,4 @@ class treeManager{
 
 		tree.print();
 	}
-};
+};*/
