@@ -1,6 +1,7 @@
 #ifndef __MYSTRING_OVERLOAD_
 #define __MYSTRING_OVERLOAD_
 
+#include <cstdlib>
 #include <cstring>
 
 class string{
@@ -24,6 +25,11 @@ class string{
 
 		//Getter
 		char *get() const{return this->str;}
+
+		//Method
+		void print(){
+			std::cout << this->str << std::endl;
+		}
 		//Setter = overload operator "="
 		void operator =(char const newInput[]){
 			if (this->str != NULL)
@@ -72,6 +78,7 @@ class string{
 		bool operator ==(char const newInput[]) const{
 			return (strcmp(this->str, newInput) == 0);
 		}
+
 		string *operator +(char const B[]) const {
 			char *auxstr = new char[strlen(this->str) + strlen(B) + 1]();
 			strcpy(auxstr, this->str);
@@ -111,10 +118,21 @@ class string{
 		}
 
 		string *operator +=(string *stringB){
-			if (this->str != NULL)
-				*(this) != (*(this) + (stringB->get()));
+			if (this->str != NULL){
+				string *aux = *(this) + (const char *) stringB->get();
+				*(this) != aux;
+			}
 			return this;
 		}
+
+		//converter overload
+		operator int() const{
+			return atoi(this->str);
+		};
+
+		operator double() const{
+			return atof(this->str);
+		};
 };
 
 
