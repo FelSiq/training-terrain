@@ -13,6 +13,11 @@ class complex{
 		im = 0;
 	}
 
+	complex(complex toCopy){
+		re = toCopy.r();
+		im = toCopy.i();
+	}
+
 	//Getters
 	public double r(){return re;}
 	public double i(){return im;}

@@ -1,27 +1,37 @@
-import java.lang.reflect.Method;
-import java.util.Scanner;
+import java.lang.reflect.Method;//To Method
+import java.lang.reflect.Field;//To Field (variables)
+import java.lang.reflect.Modifier;//To Modifier
+import java.util.Scanner;//TO Scanner
+import java.io.*; //To File/Reader/Writes
 
 class commandTree {
 	private Node <complex> root;
-	public MyFlags flags;
+	final public MyFlags flags;
+	complex lastResult;
 
 	//Constructor
 	commandTree(){
 		this.flags = new MyFlags();
+		this.lastResult = null;
 	}
 
 	//Inner classes
 	public static class MyFlags{
 		//This flags ends the loop on program
-		protected boolean endflag;
-		protected boolean helpflag;
+		final private Field[] allflags; 
+		private boolean endflag; //Private == 2
+		protected boolean helpflag; //Protected == 4
 		protected boolean boolflag;
+		protected boolean prevflag;
 
 		//Constructor
 		MyFlags(){
+			//Set end flag to false, only this time.
 			this.endflag = false;
-			this.helpflag = false;
-			this.boolflag = false;
+			//Get all declared methods on this class
+			allflags = MyFlags.class.getDeclaredFields();
+			//Clean up the flags
+			this.resetFlags();
 		}
 
 		//Getters
@@ -35,21 +45,64 @@ class commandTree {
 
 		private void flagHelp(){
 			//Read from a help text file...
-			System.out.print("...\n");
+			File fp = new File("./help");
+			//Checks if fp succeed on openning desired help file
+			if (fp.exists()){
+				try {
+					BufferedReader myReader = new BufferedReader(new FileReader(fp));
+					String myString = null;
+					do {
+						//readLine() does not read end-on-line "\n"
+						myString = myReader.readLine();
+						if (myString != null)
+							System.out.print(myString + "\n");
+					} while(myString != null);
+					myReader.close();
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+			} else System.out.print("Sorry, but I do not found a help file.\n");
+		}
+
+		private void flagPrev(){
+			System.out.print("There's no previous result to operate (null or boolean).\n");
 		}
 
 		public boolean overallCheckup(){
+			//Next flags should be modifying ONLY here due to reflection
 			if (this.endflag) this.flagEnd();
 			if (this.helpflag) this.flagHelp();
+			if (this.prevflag) this.flagPrev();
 
-			//Maybe use reflection to create a general approach...
-			return (this.endflag || this.helpflag || this.boolflag);
+			//Use reflection
+			boolean myRet = false;
+			for(Field k : this.allflags){
+				if (Modifier.isProtected(k.getModifiers())){
+					try {
+						if(myRet = (boolean) k.get(this))
+						 	break;
+					} catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
+
+			//endflag are taken into consideration on this return
+			return (this.endflag || myRet);
 		}
 
 		public void resetFlags(){
-			//Will not reset endflag
-			this.helpflag = false;
-			this.boolflag = false;
+			//Will not reset endflag (modified to be private)
+			//Using reflection
+			for (Field k : this.allflags){
+				if (Modifier.isProtected(k.getModifiers())){
+					try {
+						k.setBoolean(this, false);
+					} catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	};
 
@@ -158,8 +211,8 @@ class commandTree {
 					}
 
 				if (m != null){
-					//There's two unary operations on our complex program.
-					//"conj" and "mod"
+					//There's three unary operations on our complex program.
+					//"conj", "mod", "redo"
 					//And two unary boolean verification
 					//"isReal", "pureIm"
 					//And one binary boolean verificarion
@@ -209,6 +262,14 @@ class commandTree {
 							break;
 						case "help":
 							this.flags.helpflag = true;
+							break;
+						case "redo":
+							//This is a special keyword to recover last result.
+							if (this.lastResult != null)
+								myNode = new Node <complex>(this.lastResult);
+							else
+								this.flags.prevflag = true;
+							//If don't exists a previous result, then null will be returned.
 							break;
 						default:
 							System.out.printf("what do you mean with \"%s\"?\n", myMethod);

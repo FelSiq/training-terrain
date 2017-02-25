@@ -31,9 +31,6 @@ class complexManager{
 		//commandTree
 		commandTree myProcessor = new commandTree();
 
-		//my result holder.
-		complex myResult = null;
-
 		//Set a scanner to read the input on stdin.
 		Scanner myInput = null;
 
@@ -57,9 +54,9 @@ class complexManager{
 				//myProcessor.print();
 
 				//Solve the tree and show up the desired result
-				myResult = myProcessor.solve();
-				if (myResult != null)
-					myResult.print();
+				myProcessor.lastResult = myProcessor.solve();
+				if (myProcessor.lastResult != null)
+					myProcessor.lastResult.print();
 			} else {
 				//Checkup for flags
 				if(!myProcessor.flags.overallCheckup())
@@ -76,6 +73,5 @@ class complexManager{
 		myInput = null;
 
 		myProcessor = null;
-		myResult = null;
 	}
 };
