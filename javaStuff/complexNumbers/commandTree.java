@@ -15,11 +15,13 @@ class commandTree {
 		//This flags ends the loop on program
 		protected boolean endflag;
 		protected boolean helpflag;
+		protected boolean boolflag;
 
 		//Constructor
 		MyFlags(){
 			this.endflag = false;
 			this.helpflag = false;
+			this.boolflag = false;
 		}
 
 		//Getters
@@ -28,7 +30,7 @@ class commandTree {
 
 		//Method
 		private void flagEnd(){
-			System.out.print("program will now exit. See ya later!\n");
+			System.out.print("program will now exit. see ya later!\n");
 		}
 
 		private void flagHelp(){
@@ -41,12 +43,13 @@ class commandTree {
 			if (this.helpflag) this.flagHelp();
 
 			//Maybe use reflection to create a general approach...
-			return (this.endflag || this.helpflag);
+			return (this.endflag || this.helpflag || this.boolflag);
 		}
 
 		public void resetFlags(){
 			//Will not reset endflag
 			this.helpflag = false;
+			this.boolflag = false;
 		}
 	};
 
@@ -93,6 +96,16 @@ class commandTree {
 		protected void setSonL(Node <T> newSonL){this.sonL = newSonL;}
 	};
 
+	private class BooleanUnaryNode <T> extends UnaryNode <T>{
+		boolean myResult;
+
+		//Constructor
+		BooleanUnaryNode(Method newCommand){
+			super(newCommand);
+			this.myResult = false;
+		}
+	};
+
 	private class BinaryNode <T> extends UnaryNode <T>{
 		//Constructors
 		BinaryNode (T newValue){
@@ -108,6 +121,16 @@ class commandTree {
 		protected void setSonR(Node <T> newSonR){this.sonR = newSonR;}
 
 	}; 
+
+	private class BooleanBinaryNode <T> extends BinaryNode <T>{
+		boolean myResult;
+
+		//Constructor
+		BooleanBinaryNode(Method newCommand){
+			super(newCommand);
+			this.myResult = false;
+		}
+	};
 
 	private Node <complex> recConstruct(Scanner myInput, Method[] methodList){
 		Node <complex> myNode = null;
@@ -143,8 +166,16 @@ class commandTree {
 					//"equals"
 					
 					//Not much too proud of hardcoded stuff. 
-					if (myMethod.equals("conj") || myMethod.equals("mod")){
-						UnaryNode <complex> pointer = new UnaryNode <complex> (m);
+					if (myMethod.equals("conj") || myMethod.equals("mod") ||
+						myMethod.equals("pureIm") || myMethod.equals("isReal")){
+						//Its unary...
+						UnaryNode <complex> pointer = null;
+						if ((myMethod.equals("pureIm") || myMethod.equals("isReal")) 
+							&& !this.flags.boolflag){
+							//Its a boolean operator, and its allowed (because boolflag = 0)
+							pointer = new BooleanUnaryNode <complex> (m);
+							this.flags.boolflag = true;
+						} else pointer = new UnaryNode <complex> (m);
 
 						pointer.setSonL(recConstruct(myInput, methodList));
 
@@ -154,7 +185,13 @@ class commandTree {
 						pointer = null;
 					} else{
 						//All other methods are a binary operation.
-						BinaryNode <complex> pointer = new BinaryNode <complex> (m);
+						BinaryNode <complex> pointer = null;
+						if (myMethod.equals("equals") && !this.flags.boolflag){
+							//Its a boolean operator, and its allowed (because boolflag = 0)
+							pointer = new BooleanBinaryNode <complex> (m);
+							this.flags.boolflag = true;
+						} else pointer = new BinaryNode <complex> (m);
+
 						pointer.setSonL(recConstruct(myInput, methodList));
 						pointer.setSonR(recConstruct(myInput, methodList));
 
@@ -200,12 +237,15 @@ class commandTree {
 	private complex recSolve(Node <complex> root){
 		if (root.isRoot())
 			return root.getVal();
-		else if (root instanceof BinaryNode){
+		else if (root instanceof BinaryNode /*|| root instanceof BooleanBinaryNode*/){
 			//Binary method
 			try {
 				Object dummy = root.getCommand().invoke(recSolve(root.getSonL()), 
 					recSolve(root.getSonR()));
-				return (complex) dummy;
+				if (!(root instanceof BooleanBinaryNode))
+					return (complex) dummy;
+				else 
+					System.out.print((Boolean) dummy + "\n");
 			} catch (Exception e){
 				e.printStackTrace();
 			}
@@ -213,7 +253,10 @@ class commandTree {
 			//Unary method
 			try {
 				Object dummy = root.getCommand().invoke(recSolve(root.getSonL()));
-				return (complex) dummy;
+				if (!(root instanceof BooleanUnaryNode))
+					return (complex) dummy;
+				else
+					System.out.print((Boolean) dummy + "\n");
 			} catch (Exception e){
 				e.printStackTrace();
 			}
