@@ -3,6 +3,52 @@ import java.util.Scanner;
 
 class commandTree {
 	private Node <complex> root;
+	public MyFlags flags;
+
+	//Constructor
+	commandTree(){
+		this.flags = new MyFlags();
+	}
+
+	//Inner classes
+	public static class MyFlags{
+		//This flags ends the loop on program
+		protected boolean endflag;
+		protected boolean helpflag;
+
+		//Constructor
+		MyFlags(){
+			this.endflag = false;
+			this.helpflag = false;
+		}
+
+		//Getters
+		public boolean getFlagEnd(){return this.endflag;}
+		public boolean getFlagHelp(){return this.helpflag;}
+
+		//Method
+		private void flagEnd(){
+			System.out.print("program will now exit. See ya later!\n");
+		}
+
+		private void flagHelp(){
+			//Read from a help text file...
+			System.out.print("...\n");
+		}
+
+		public boolean overallCheckup(){
+			if (this.endflag) this.flagEnd();
+			if (this.helpflag) this.flagHelp();
+
+			//Maybe use reflection to create a general approach...
+			return (this.endflag || this.helpflag);
+		}
+
+		public void resetFlags(){
+			//Will not reset endflag
+			this.helpflag = false;
+		}
+	};
 
 	private class Node <T>{
 		protected T value;
@@ -26,12 +72,12 @@ class commandTree {
 		public Method getCommand(){return myCommand;}
 		protected Node <T> getSonL(){return this.sonL;} 
 		protected Node <T> getSonR(){return this.sonR;} 
+
+		//Method
+		boolean isRoot(){return (this.sonL == null && this.sonR == null);}
 	};
 
 	private class UnaryNode <T> extends Node <T>{
-
-		boolean isRoot(){return (this.sonL == null);}
-
 		//Constructors
 		UnaryNode(T newValue) {
 			//Call on respective constructor of superclass Node
@@ -48,9 +94,7 @@ class commandTree {
 	};
 
 	private class BinaryNode <T> extends UnaryNode <T>{
-
-		boolean isRoot(){return (super.isRoot() && this.sonR == null);}
-
+		//Constructors
 		BinaryNode (T newValue){
 			super(newValue);
 			this.sonR = null;
@@ -70,10 +114,13 @@ class commandTree {
 		if (myInput.hasNext()){
 			//First check if this node is a Unary or Binary node
 			if (myInput.hasNextDouble()){
-				myNode = new UnaryNode <complex> (
-					new complex(Double.parseDouble(myInput.next()), 
-						Double.parseDouble(myInput.next())));
-				//Ready to return a brand-new leaf.
+				double newReal = Double.parseDouble(myInput.next());
+				if (myInput.hasNextDouble()){
+					myNode = new UnaryNode <complex> (
+						new complex(newReal, Double.parseDouble(myInput.next())));
+					//Ready to return a brand-new leaf.
+				}
+				//If false, null will be returned.
 			} else {
 				//We are sure that the next node will be a method,
 				//if not a illegal command.
@@ -90,23 +137,46 @@ class commandTree {
 				if (m != null){
 					//There's two unary operations on our complex program.
 					//"conj" and "mod"
+					//And two unary boolean verification
+					//"isReal", "pureIm"
+					//And one binary boolean verificarion
+					//"equals"
 					
 					//Not much too proud of hardcoded stuff. 
 					if (myMethod.equals("conj") || myMethod.equals("mod")){
-						UnaryNode <complex> pointer =  new UnaryNode <complex> (m);
+						UnaryNode <complex> pointer = new UnaryNode <complex> (m);
+
 						pointer.setSonL(recConstruct(myInput, methodList));
-						myNode = pointer;
+
+						//Check if everything worked on last recursive call
+						if (pointer.getSonL() != null)
+							myNode = pointer;
 						pointer = null;
 					} else{
 						//All other methods are a binary operation.
 						BinaryNode <complex> pointer = new BinaryNode <complex> (m);
 						pointer.setSonL(recConstruct(myInput, methodList));
 						pointer.setSonR(recConstruct(myInput, methodList));
-						myNode = pointer;
+
+						//Check everything works fine
+						if (pointer.getSonL() != null && pointer.getSonR() != null)
+							myNode = pointer;
 						pointer = null;
 					}
 				} else {
-					System.out.print("error: invalid syntax on this command.\n");
+					//CHeck both for "exit" and "help" special commands,
+					//But only if they're alone in the "expression"
+					switch(myMethod){
+						case "exit":
+							this.flags.endflag = true;
+							break;
+						case "help":
+							this.flags.helpflag = true;
+							break;
+						default:
+							System.out.printf("what do you mean with \"%s\"?\n", myMethod);
+							break;
+					}
 				}
 				//Probably something went wrong at this point.
 				//null will be returned by default.
@@ -127,10 +197,32 @@ class commandTree {
 		return false;
 	};
 
-	public complex solve(){
-
-		//return null by default
+	private complex recSolve(Node <complex> root){
+		if (root.isRoot())
+			return root.getVal();
+		else if (root instanceof BinaryNode){
+			//Binary method
+			try {
+				Object dummy = root.getCommand().invoke(recSolve(root.getSonL()), 
+					recSolve(root.getSonR()));
+				return (complex) dummy;
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		} else {
+			//Unary method
+			try {
+				Object dummy = root.getCommand().invoke(recSolve(root.getSonL()));
+				return (complex) dummy;
+			} catch (Exception e){
+				e.printStackTrace();
+			}
+		}
 		return null;
+	};
+
+	public complex solve(){
+		return recSolve(this.root);
 	};
 
 	public void purge(){this.root = null;}
@@ -144,7 +236,7 @@ class commandTree {
 
 		if (root.getCommand() != null)
 			System.out.print(root.getCommand().getName() + "\n");
-		else 
+		else 	
 			root.getVal().print();
 		
 	}

@@ -1,6 +1,8 @@
 import java.util.*; 
 
 class complexManager{
+	/*
+	//Earlier version facilities
 	private static complex getComplex(Scanner myScan){
 		double r = 0, i = 0;
 		if (myScan.hasNext()){
@@ -23,6 +25,7 @@ class complexManager{
 
 		return index;
 	}
+	*/
 
 	public static void main(String args[]){
 		//commandTree
@@ -33,15 +36,13 @@ class complexManager{
 
 		//Set a scanner to read the input on stdin.
 		Scanner myInput = null;
-		//This flags ends the loop on program
-		boolean endflag = false;
 
 		//Set the numeric float US STD representation,
 		//on input and on output, involving this scan.
 		System.out.print("Please insert a command: (type \"help\" for list)\n");
 		myInput = new Scanner(System.in);
 
-		while(!endflag){
+		while(!myProcessor.flags.getFlagEnd()){
 			//Get system input
 			System.out.print("> ");
 			myInput.reset();
@@ -51,20 +52,23 @@ class complexManager{
 			myInput.useLocale(Locale.US); 
 
 			//Procces inputs
-			myProcessor.construct(myInput);
+			if(myProcessor.construct(myInput)){
+				//Debbug
+				//myProcessor.print();
 
-			//Debbug
-			myProcessor.print();
+				//Solve the tree and show up the desired result
+				myResult = myProcessor.solve();
+				if (myResult != null)
+					myResult.print();
+			} else {
+				//Checkup for flags
+				if(!myProcessor.flags.overallCheckup())
+					System.out.print("error: invalid syntax on this command.\n");
+			}	
 
-			myResult = myProcessor.solve();
-			if (myResult != null)
-				myResult.print();
-
+			//Clean up the command tree of this call
+			myProcessor.flags.resetFlags();
 			myProcessor.purge();
-
-			//Just in debbug stage
-			endflag = true;
-			//Linked list and stack must be used on final version.
 		}
 
 		//Deference the memory from last input
