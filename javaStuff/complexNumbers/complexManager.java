@@ -25,121 +25,53 @@ class complexManager{
 	}
 
 	public static void main(String args[]){
+		//commandTree
+		commandTree myProcessor = new commandTree();
+
+		//my result holder.
+		complex myResult = null;
+
 		//Set a scanner to read the input on stdin.
 		Scanner myInput = null;
 		//This flags ends the loop on program
-		boolean endflag = true;
-
-		//Create a linked list to keep the numbers
-		clList <clList<complex>> myGroup = new clList<clList<complex>> ();
-		//Set the UNIQUE KEY COUNTER
-		int keyKepper = 0;
-
-		//Pointers do instances
-		complex myNumX = null, 
-		myNumY = null, 
-		myNum = null;
+		boolean endflag = false;
 
 		//Set the numeric float US STD representation,
 		//on input and on output, involving this scan.
-		System.out.print("Please insert a command: (type \"help\" for list)\n> ");
+		System.out.print("Please insert a command: (type \"help\" for list)\n");
 		myInput = new Scanner(System.in);
-		myInput.useLocale(Locale.US); 
 
-		while(endflag){
-			if (myInput.hasNext()){
-				switch(myInput.next()){
-					case "insert":
-						myNum = getComplex(myInput);
-						if (myNum != null){
-							myGroup.search(getIndex(myInput, myGroup)).insert(myNum, keyKepper++);
-							myNum.print();
-						}
-						myNum = null;
-						break;
-					case "add":
-						myNumX = getComplex(myInput); 
-						myNumY = getComplex(myInput);
-						if (myNumX != null && myNumY != null)
-							/*stackComplex.push(*/myNumX.add(myNumY).print()/*)*/;
-						myNumX = null;
-						myNumY = null;
-						break;
-					case "div":
-						myNumX = getComplex(myInput); 
-						myNumY = getComplex(myInput);
-						if (myNumX != null && myNumY != null)
-							/*stackComplex.push(*/myNumX.div(myNumY).print()/*)*/;
-						myNumX = null;
-						myNumY = null;
-						break;
-					case "mult":
-						myNumX = getComplex(myInput); 
-						myNumY = getComplex(myInput);
-						if (myNumX != null && myNumY != null)
-							/*stackComplex.push(*/myNumX.mult(myNumY).print()/*)*/;
-						myNumX = null;
-						myNumY = null;
-						break;
-					case "sub":
-						myNumX = getComplex(myInput); 
-						myNumY = getComplex(myInput);
-						if (myNumX != null && myNumY != null)
-							/*stackComplex.push(*/myNumX.sub(myNumY).print()/*)*/;
-						myNumX = null;
-						myNumY = null;
-						break;
-					case "mod":
-						myNum = getComplex(myInput);
-						if (myNum != null)
-							/*stackComplex.push(*/myNum.mod().print()/*)*/;
-						myNum = null;
-						break;
-					case "conj":
-						myNum = getComplex(myInput);
-						if (myNum != null)
-							/*stackComplex.push(*/myNum.conj().print()/*)*/;
-						myNum = null;
-						break;
-					case "equals":
-						myNumX = getComplex(myInput); 
-						myNumY = getComplex(myInput);
-						if (myNumX != null && myNumY != null)
-							System.out.print(myNumX.equals(myNumY) + "\n");
-						myNumX = null;
-						myNumY = null;
-						break;
-					case "exit":
-						System.out.print("Program will now exit...\n");
-						endflag = false;
-						break;
-					case "printAll":
-						myGroup.print();
-						break;
-					case "printList":
-						if (myInput.hasNext()){
-							clList <complex> aux = myGroup.search(Integer.parseInt(myInput.next()));
-							if (aux != null)
-								aux.print();
-							else 
-								System.out.print("List not found.\n");
-						}
-						break;
-					case "size":
-						System.out.print("My database size is: "+ myGroup.size() +"\n");
-						break;
-					default: 
-						System.out.print("Unknown command.\n");
-						break;
-				}
-			}
+		while(!endflag){
 			//Get system input
 			System.out.print("> ");
 			myInput.reset();
+
+			//reset() removes the Locale setting.
+			//Belive me, this was H-A-R-D to find out.
+			myInput.useLocale(Locale.US); 
+
+			//Procces inputs
+			myProcessor.construct(myInput);
+
+			//Debbug
+			myProcessor.print();
+
+			myResult = myProcessor.solve();
+			if (myResult != null)
+				myResult.print();
+
+			myProcessor.purge();
+
+			//Just in debbug stage
+			endflag = true;
+			//Linked list and stack must be used on final version.
 		}
 
 		//Deference the memory from last input
 		myInput.close();
 		myInput = null;
+
+		myProcessor = null;
+		myResult = null;
 	}
 };
