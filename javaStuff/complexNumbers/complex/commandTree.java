@@ -1,33 +1,44 @@
+package complex;
 import java.lang.reflect.Method;//To Method
 import java.lang.reflect.Field;//To Field (variables)
 import java.lang.reflect.Modifier;//To Modifier
 import java.util.Scanner;//TO Scanner
 import java.io.*; //To File/Reader/Writes
 
-class commandTree {
+public class commandTree {
 	private Node <complex> root;
 	final public MyFlags flags;
-	complex lastResult;
+	private complex lastResult;
 
-	//Constructor
-	commandTree(){
-		this.flags = new MyFlags();
+	//Constructor in package must be public
+	public commandTree(){
+		this.flags = new MyFlags(false);
 		this.lastResult = null;
 	}
+
+	public commandTree(boolean myDEBUG){
+		this.flags = new MyFlags(myDEBUG);
+		this.lastResult = null;
+	}
+
+	//Getter
+	public complex lastRes(){return lastResult;}
 
 	//Inner classes
 	public static class MyFlags{
 		//This flags ends the loop on program
 		final private Field[] allflags; 
 		private boolean endflag; //Private == 2
+		private boolean debugflag;
 		protected boolean helpflag; //Protected == 4
 		protected boolean boolflag;
 		protected boolean prevflag;
 
 		//Constructor
-		MyFlags(){
+		MyFlags(boolean myDEBUG){
 			//Set end flag to false, only this time.
 			this.endflag = false;
+			this.debugflag = myDEBUG;
 			//Get all declared methods on this class
 			allflags = MyFlags.class.getDeclaredFields();
 			//Clean up the flags
@@ -289,7 +300,15 @@ class commandTree {
 			//There must have a nicer way to do this...
 			complex javaSucks = new complex(0.0, -0.0);
 			Method[] methodList = javaSucks.getClass().getMethods();
-			return ((this.root = recConstruct(myInput, methodList)) != null);
+			boolean result = ((this.root = recConstruct(myInput, methodList)) != null);
+			
+			if (this.flags.debugflag){
+				if (result){
+					System.out.print("Final expression tree result:\n");
+					this.print();
+				} else System.out.print("d: can't create expression tree.\n");
+			}
+			return result;
 		}
 		//Return false by default
 		return false;
@@ -326,7 +345,10 @@ class commandTree {
 	};
 
 	public complex solve(){
-		return recSolve(this.root);
+		complex aux = recSolve(this.root);
+		if (aux != null)
+			this.lastResult = aux;
+		return aux;
 	};
 
 	public void purge(){this.root = null;}

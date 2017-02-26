@@ -1,6 +1,7 @@
+package complex;
 import java.util.*; 
 
-class complex{
+public class complex{
 	private double re, im;
 	//Constructors
 	complex(double paramR, double paramI){

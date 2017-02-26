@@ -3,16 +3,17 @@ CC = javac
 RN = java
 EXT = class
 
-all: complex linkedlist commandTree manager
+all: complex commandTree manager
 complex:
-	$(CC) complex.java $(CFLAGS)
-linkedlist:
-	$(CC) clList.java $(CFLAGS)
+	$(CC) ./complex/complex.java $(CFLAGS)
 commandTree:
-	$(CC) commandTree.java $(CFLAGS)
+	$(CC) ./complex/commandTree.java $(CFLAGS)
 manager:
 	$(CC) complexManager.java $(CFLAGS)
 run:
 	$(RN) complexManager
+debug:
+	$(RN) complexManager -DEBUG
 clean:
-	rm *.$(EXT)
+	rm ./complex/*.$(EXT)
+	rm ./*.$(EXT)

@@ -1,0 +1,9 @@
+compile:
+	$ make
+
+run:
+	$ make run
+or
+	$ make debug
+
+If you run with debug option, the expression tree will be printed.

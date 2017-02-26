@@ -1,35 +1,16 @@
 import java.util.*; 
+import complex.*;
 
 class complexManager{
-	/*
-	//Earlier version facilities
-	private static complex getComplex(Scanner myScan){
-		double r = 0, i = 0;
-		if (myScan.hasNext()){
-			r = Double.parseDouble(myScan.next());
-			if (myScan.hasNext()){
-				i = Double.parseDouble(myScan.next());
-				return new complex(r, i);
-			}
-		}
-		System.out.print("Can't create complex number. \n");
-		return null;
-	}
-
-	private static int getIndex(Scanner myInput, clList <clList<complex>> myGroup){
-		int index = 0;
-		if (myInput.hasNextInt())
-			index = Integer.parseInt(myInput.next());
-		while (myGroup.size() <= index)
-			myGroup.insert(new clList <complex> (), myGroup.size());
-
-		return index;
-	}
-	*/
 
 	public static void main(String args[]){
+		//Process args
+		boolean myDebug = false;
+		for(String s : args){
+			myDebug = (s.equals("-DEBUG"));
+		}
 		//commandTree
-		commandTree myProcessor = new commandTree();
+		commandTree myProcessor = new commandTree(myDebug);
 
 		//Set a scanner to read the input on stdin.
 		Scanner myInput = null;
@@ -50,13 +31,10 @@ class complexManager{
 
 			//Procces inputs
 			if(myProcessor.construct(myInput)){
-				//Debbug
-				//myProcessor.print();
-
 				//Solve the tree and show up the desired result
-				myProcessor.lastResult = myProcessor.solve();
-				if (myProcessor.lastResult != null)
-					myProcessor.lastResult.print();
+				myProcessor.solve();
+				if (myProcessor.lastRes() != null)
+					myProcessor.lastRes().print();
 			} else {
 				//Checkup for flags
 				if(!myProcessor.flags.overallCheckup())
