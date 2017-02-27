@@ -17,10 +17,6 @@ class MyAuxClass{
 	//variable if another constructor is needed afterwards.
 	private double mySecretVariable = 9.5;
 
-	/*
-	Study static and non-static initializer blocks!
-	*/
-
 	//A static nested class can't 
 	static class AuxNestedStaticClass{
 		int k;
