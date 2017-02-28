@@ -1,0 +1,71 @@
+
+#####################################
+Based on the blog post on codingfreak. 
+font: http://codingfreak.blogspot.com/2008/02/compilation-process-in-gcc.html
+#####################################
+
+Each C code compiled with gcc follow 4 pillar steps before end up in the final product.
+
+1 - Preprocessing
+2 - Compilation
+3 - Assemblying
+4 - Linkage
+
+//util gcc flags:
+  -E 	Preprocess only; do not compile, assemble or link
+  -S 	Compile only; do not assemble or link
+  -c 	Compile and assemble, but do not link
+
+
+1 - Preprocessing
+Why? The preprocessor is a program that the compiler runs into the source .c file, in order
+to make header file inclusions and solve directives like if-else-define-undef. The stardard
+preprocessor of gcc is cpp.
+
+The cpp can be invoked directly or by gcc intermediation, with the -E flag.
+
+How to: (by standard, the preprocessed .c file is a .i file, and on .cc, .ii)
+	$ gcc -E input.c > output.i
+or
+	$ cpp input.c
+
+2 - Compilation
+Why? In this step we compile the .c code, i.e translate it to Assembly. The output depends 
+on the system Architecture (mine x86_64 GNU/Linux) and some others parameters, like the
+compiler itself and the version.
+
+How to:
+	$ gcc -S input.i -o output.s
+
+3. Assembler
+Why? On this step, the assembly code is translated to machine language/binary code. If there's
+any call of extern resources (functions, variables, files), the assembler will mark as undefined,
+to be filled later, on the fourth and final step, the linker.
+
+The format true format of the type of the product data can be variable. On linux systems, then
+it is likely to be ELF (Executable and Linking Format). On Windows, COFF (Common Object-File
+Format).
+
+The standard assembler of gcc is the as, which, like the preprocessor, can be invoked directly
+or by gcc intermediation, with -c flag.
+
+How to: (both will generate a pure binary file *.out automatically)
+	$ gcc -c input.s > input.o
+or
+	$ as input.s 
+
+4. External linkage
+Why? On the last step, all compiled and assembled parts will be put together on the same file in
+order to create a full working application, as it was designed to be. No only this, some automatic
+code generation - some initial code to set up everything and some final application code to end the 
+application correctly, happens on this stage.
+
+The standard gcc linker is ld, whoever, the full linkage command is extensive and detailed.
+
+In order to simplify things, we can call gcc directly on the .o file, and the linkage
+happens automatically:
+
+How to: 
+	$ gcc input.o (this will create a a.out automatically)
+or 
+	$ gcc input.o -o myappname
