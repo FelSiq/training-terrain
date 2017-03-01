@@ -39,7 +39,8 @@ int main(int argc, char const *argv[]){
 	//writing on file, class "ofstream".
 	//If the second param is not defined (opening mode, just like the C fopen), 
 	//then the default is ios::in for ifstream e ios::out for ofstream.
-	//Operators can be combined with binary OR | operator.
+	//Operators can be combined with binary OR | operator, because
+	//these flags are stored in BITS of a BYTE.
 	std::ofstream *fout = new std::ofstream("test.out", std::fstream::out);
 	//Even of that situation, the ios::out is redundant here, as a object of the
 	//class std::ofstream, that flag is automatically assumed.
