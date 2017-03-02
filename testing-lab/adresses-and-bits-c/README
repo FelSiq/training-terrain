@@ -1,0 +1,12 @@
+Relevant specifications on where tests are made:
+
+Kernel: Linux
+OS: GNU/Linux
+Release: 4.4.0-64-generic 
+Version: #85-Ubuntu SMP 
+Made in: Mon Feb 20 11:50:30 UTC 2017 
+Processor: x86_64
+
+Compiler info:
+gcc (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609
+Copyright (C) 2015 Free Software Foundation, Inc.
