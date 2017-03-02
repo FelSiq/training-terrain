@@ -294,9 +294,9 @@ int main(int argc, char const *argv[]){
 //	Merely illustrative:
 // 	ADR	FINAL CONCLUSIONS:
 //		-------------------------	\
-//	901	|ARGV					|	|
-//		-------------------------	| Curiosity: 	by default argv is 300 bytes
-//	900	|MAIN FUNC VARIABLES 	|	|				below argc.
+//	901	|ARGV					|	| Curiosity: by default argv is aprox. 250 bytes
+//		-------------------------	|            below argc, with a "empty" main.
+//	900	|MAIN FUNC VARIABLES 	|	|			 argv is always the last adress of the program.
 //		-------------------------	|
 //	898	|ARGC					|	|- STACK memory (Ascending inner-function)
 //		-------------------------	|				(Descending between functions)
