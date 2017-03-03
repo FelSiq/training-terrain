@@ -1,6 +1,14 @@
 class MyAuxClass{
-	class MyAuxInnerClass{};
+	private int myX;
+	class MyAuxInnerClass{
+		//C++ "Friend" behaviour
+		int k;
+		public int getX(){return myX;} 
+	};
 	static class MyAuxNestedClass{};
+
+	//Won't work. Still the unidirectional "friend" behaviour of C++
+	//public int getk(){return k;}
 };
 
 class MySubClass extends MyAuxClass{
