@@ -17,6 +17,7 @@
 			sc $t0, 0($v0)	#Store conditional
 			#$t0 will be 0 if and only if memory region 0($v0) is modified exactly between ll and sc instructions
 			#else, $t0 will be 1
+			#sc also fails when a context exchange was made by the processor in between ll and sc instructions.
 			beq $t0, $zero, loop_until_works #Branch, if store do not worked
 
 		ori $v0, $zero, 1
