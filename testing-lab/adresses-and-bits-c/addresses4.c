@@ -6,7 +6,7 @@
 void clear_vector(int vector[], int vec_size){
 	int *p;
 	for (p = vector; p < &vector[vec_size]; ++p)
-		*p = (unsigned int) ((void *) p - (void *)vector);
+		*p = (int) ((void *) p - (void *)vector);
 }
 
 void print_vector(void * const vector, int vec_size){
@@ -18,12 +18,9 @@ void print_vector(void * const vector, int vec_size){
 
 int main(int argc, char const *argv[]){
 	int vector[VEC_SIZE];
-
-	auto void (*p1)(int *, int) = &clear_vector;
-	auto void (*p2)(void *, int) = &print_vector;
 	
-	p1(vector, VEC_SIZE);
-	p2(vector, VEC_SIZE);
+	clear_vector(vector, VEC_SIZE);
+	print_vector(vector, VEC_SIZE);
 
 	return 0;
 }
