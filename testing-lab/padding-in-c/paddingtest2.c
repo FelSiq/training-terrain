@@ -1,12 +1,10 @@
 #include <stdio.h>
 
-struct myBelovedStruct {
+typedef struct {
 	char a[3];
 	short int b;
 	int c;
-} __attribute__((packed));
-
-typedef struct myBelovedStruct myBelovedStruct;
+} myBelovedStruct;
 
 int main(int argc, char const *argv[]){
 	myBelovedStruct mbs = {"ABC", 0x123, 0x456789AB};
