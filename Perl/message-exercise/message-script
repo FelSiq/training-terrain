@@ -1,12 +1,6 @@
 $Input = <STDIN>;
 chomp($Input);
 
-$ReplyTo = "NA";
-$From = "NA";
-$Date = "NA";
-$Subject = "NA";
-$Who = "NA";
-
 while ($Input = <>){
 	if ($Input =~ m/^\s*$/i) {
 		last;
@@ -30,6 +24,10 @@ while ($Input = <>){
 			$Who = $1;
 		}
 	}
+}
+
+if (not defined($ReplyTo) or not defined($From) or not defined($Subject) or not defined($Who)) {
+	die "E: can't find necessary information to construct output.\n";
 }
 
 print "To: $ReplyTo ($Who)\nFrom: $From\nSubject: Re: $Subject\n\nOn $Date $Who wrote:\n";
