@@ -1,0 +1,6 @@
+undef $/;
+$Input = <>;
+#while ($Input = <>) {
+	$Input =~ s/(?<=\d)(?=(?:\d\d\d)+(?!\d))/./g;
+	print $Input;
+#}

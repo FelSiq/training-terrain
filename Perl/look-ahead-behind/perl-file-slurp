@@ -1,0 +1,3 @@
+undef $/; #Enter file slurp mode.
+$Input = <>;
+print $Input;
