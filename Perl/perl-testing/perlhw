@@ -1,0 +1,37 @@
+#$string = "Hello  worl3d!";
+#$counter = 5;
+
+#m/.../ : m -> describes a regex matching (may be optional)
+#'/' delimits the regex itself
+#'=~' links the string to be examined and the regex. Can be read as "matches"
+
+#while (0 < $counter--) {
+#	print "$greetings number $counter!\n";
+#}
+
+#if ($string =~ m/.*[0-9]+.*/) {
+#	print "Found numbers!\n";
+#} else {
+#	print "Can't found nothing.\n";
+#}
+
+
+print "Please give a integer input (in C or F):\n";
+$Input = <STDIN>; #Read a whole input line
+chomp($Input); #Removes que \n
+
+if ($Input =~ m/^\s*([+-]?[0-9]+(?:\.[0-9]*)?)\s*([CF])\s*$/i) {
+	$AuxInput = $1;
+	
+	if ($2 =~ m/c/i) {
+		$output = ($AuxInput * 9 / 5) + 32;
+		printf "%.2f C is %.2f F.\n", $AuxInput, $output;
+	} elsif ($2 =~ m/f/i) {
+		$output = ($AuxInput - 32) * 5 / 9;
+		printf "%.2f F is %.2f C.\n", $AuxInput, $output;
+	} else {
+		print "Unknown symbol \"$2\".\n";
+	}
+} else {
+	print "This input is not valid.\n";
+}

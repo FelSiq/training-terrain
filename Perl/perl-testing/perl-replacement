@@ -1,0 +1,9 @@
+$Aux = "";
+
+do {
+	$Input = <STDIN>;
+	$Input =~ s/(\.\d\d[1-9]?)\d*\n?/$1/g;
+	$Aux = $1;
+} while ($Aux =~ m/"\Z"/);
+
+print "$Input";
