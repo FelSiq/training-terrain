@@ -26,7 +26,7 @@ class classC extends classB{
 	}
 };
 
-class virtualTest{
+class VirtualTest{
 	static public void main(String args[]){
 		//On inherit pointers, the superclass pointer can point 
 		//to either a subclasses or its class aswell.
