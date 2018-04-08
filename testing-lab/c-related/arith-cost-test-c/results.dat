@@ -1,0 +1,8 @@
+Time (int addition):	5697810	average: 0.000570
+Time (int subtraction):	6487199	average: 0.000649
+Time (int mult):	6486419	average: 0.000649
+Time (int misc):	6945317	average: 0.000695
+Time (float addition):	6495654	average: 0.000650
+Time (float subtr):	6501965	average: 0.000650
+Time (float mult):	6495474	average: 0.000650
+Time (float misc):	9721243	average: 0.000972
