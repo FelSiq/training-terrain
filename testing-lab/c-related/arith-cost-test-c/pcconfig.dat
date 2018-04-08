@@ -1,0 +1,11 @@
+       product: Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz
+       vendor: Intel Corp.
+       physical id: 27
+       bus info: cpu@0
+       version: Intel(R) Core(TM) i5-3210M CPU @ 2.50GHz
+       slot: SOCKET 0
+       size: 1393MHz
+       capacity: 3800MHz
+       width: 64 bits
+       clock: 100MHz
+
