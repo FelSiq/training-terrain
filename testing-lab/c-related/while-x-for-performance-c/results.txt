@@ -1,0 +1,55 @@
+# INCREMENTS AND DECREMENTS AFTER THE VARIABLE (var++ and var--)
+INCREMENTING FOR LOOP without compiler optimization: 0.002610
+INCREMENTING FOR LOOP with compiler optimization O1: 0.000030
+INCREMENTING FOR LOOP with compiler optimization O2: 0.000010
+INCREMENTING FOR LOOP with compiler optimization O3: 0.000010
+
+DECREMENTING FOR LOOP without compiler optimization: 0.002610
+DECREMENTING FOR LOOP with compiler optimization O1: 0.000030
+DECREMENTING FOR LOOP with compiler optimization O2: 0.000010
+DECREMENTING FOR LOOP with compiler optimization O3: 0.000010
+
+INCREMENTING WHILE LOOP without compiler optimization: 0.002670
+INCREMENTING WHILE LOOP with compiler optimization O1: 0.000030
+INCREMENTING WHILE LOOP with compiler optimization O2: 0.000010
+INCREMENTING WHILE LOOP with compiler optimization O3: 0.000010
+
+DECREMENTING WHILE LOOP without compiler optimization: 0.002680
+DECREMENTING WHILE LOOP with compiler optimization O1: 0.000030
+DECREMENTING WHILE LOOP with compiler optimization O2: 0.000010
+DECREMENTING WHILE LOOP with compiler optimization O3: 0.000010
+
+CONCLUSIONS:
+- INCREMENTING and DECREMENTING FOR loops have pretty much the same performance.
+- INCREMENTING and DECREMENTING WHILE loops have pretty much the same performance.
+- The difference between FOR and WHILE loops are not exactly significant. WHILE
+  loops shows a small extra overhead, but not that much. I, personally, would
+  not think too hard choosing between FOR and WHILE if performance is the goal.
+
+# INCREMENTS AND DECREMENTS BEFORE THE VARIABLE (++var and --var):
+INCREMENTING FOR LOOP without compiler optimization: 0.002680
+INCREMENTING FOR LOOP with compiler optimization O1: 0.000030
+INCREMENTING FOR LOOP with compiler optimization O2: 0.000010
+INCREMENTING FOR LOOP with compiler optimization O3: 0.000010
+
+DECREMENTING FOR LOOP without compiler optimization: 0.002670
+DECREMENTING FOR LOOP with compiler optimization O1: 0.000030
+DECREMENTING FOR LOOP with compiler optimization O2: 0.000010
+DECREMENTING FOR LOOP with compiler optimization O3: 0.000010
+
+INCREMENTING WHILE LOOP without compiler optimization: 0.002670
+INCREMENTING WHILE LOOP with compiler optimization O1: 0.000030
+INCREMENTING WHILE LOOP with compiler optimization O2: 0.000010
+INCREMENTING WHILE LOOP with compiler optimization O3: 0.000010
+
+DECREMENTING WHILE LOOP without compiler optimization: 0.002670
+DECREMENTING WHILE LOOP with compiler optimization O1: 0.000030
+DECREMENTING WHILE LOOP with compiler optimization O2: 0.000010
+DECREMENTING WHILE LOOP with compiler optimization O3: 0.000010
+
+CONCLUSIONS:
+- If FOR loops, the operation (--i or ++i) BEFORE seens to be a little
+  slower than the same operation after the variale (i++ or i--) 
+  (without compiler optimizations)
+- In while, the performance is pretty much the same with or without
+  compiler optimizations
