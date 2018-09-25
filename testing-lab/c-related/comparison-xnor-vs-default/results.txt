@@ -1,0 +1,7 @@
+XNOR:
+Total time: 72
+Avrg time: 0.720000
+
+DEFAULT COMPARISON:
+Total time: 71
+Avrg time: 0.710000
