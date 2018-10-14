@@ -32,20 +32,37 @@ void generic_copy3(void *const dest, void *const src, const size_t size) {
 	memcpy(dest, src, size);
 }
 
+// SWAP
+static void swap(register void *a, register void *b, register size_t size_memb) {
+	register unsigned char c;
+	while(size_memb--) {
+		c = *(unsigned char *)a;
+		*(unsigned char *)(a++) = *(unsigned char *)b;
+		*(unsigned char *)(b++) = c;
+		
+		/*
+		XOR swaps are worse.
+			*(unsigned char *)a ^= *(unsigned char *)b;
+			*(unsigned char *)b ^= *(unsigned char *)a;
+			*(unsigned char *)a++ ^= *(unsigned char *)b++;
+		*/
+	}
+}
+
 // Testing section
 typedef int type_test;
-#define printf_mask "%d\n"
+#define printf_mask "dest %d src %d\n"
 #define loop_rep (size_t) 1000000000
 
 int main(int argc, char *argv[]) {
 
 	type_test src = ((unsigned) -1) >> 1;
-	type_test dest;
+	type_test dest = 1;
 
 	for (register size_t j = 0; j < loop_rep; j++) 
-		generic_copy3(&dest, &src, sizeof(type_test));
+		generic_copy2(&dest, &src, sizeof(type_test));
 
-	printf(printf_mask, dest);
+	printf(printf_mask, dest, src);
 
 	return 0;
 }
