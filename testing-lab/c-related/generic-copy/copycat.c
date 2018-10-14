@@ -4,14 +4,14 @@
 
 /*
 	Code showing how to copy data from a void *
-	souce to a generic destiny using just the
+	source to a generic destiny using just the
 	size of the source as extern information.
 */
 
 // Way 1
-void generic_copy1(void *dest, void *src, size_t size) {
-	unsigned char *aux_a = dest;
-	unsigned char *aux_b = src;
+void generic_copy1(void *const dest, void *const src, const size_t size) {
+	unsigned char *const aux_a = dest;
+	unsigned char *const aux_b = src;
 
 	for (register size_t i = 0; i < size; i++) {
 		aux_a[i] = aux_b[i];
@@ -19,7 +19,7 @@ void generic_copy1(void *dest, void *src, size_t size) {
 }
 
 // Way 2
-void generic_copy2(void *dest, void *src, size_t size) {
+void generic_copy2(void *const dest, void *const src, const size_t size) {
 	register size_t i = 0;
 	while (i < size) {
 		*(unsigned char *)(dest + i) = *(unsigned char *)(src + i);
@@ -28,7 +28,7 @@ void generic_copy2(void *dest, void *src, size_t size) {
 }
 
 // Way 3
-void generic_copy3(void *dest, void *src, size_t size) {
+void generic_copy3(void *const dest, void *const src, const size_t size) {
 	memcpy(dest, src, size);
 }
 
@@ -43,7 +43,7 @@ int main(int argc, char *argv[]) {
 	type_test dest;
 
 	for (register size_t j = 0; j < loop_rep; j++) 
-		generic_copy1(&dest, &src, sizeof(type_test));
+		generic_copy3(&dest, &src, sizeof(type_test));
 
 	printf(printf_mask, dest);
 
